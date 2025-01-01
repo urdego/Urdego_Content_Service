@@ -1,6 +1,5 @@
 package io.urdego.urdego_content_service.domain.entity;
 
-import io.urdego.urdego_content_service.domain.entity.constant.ContentInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,9 +23,6 @@ public class Content extends BaseEntity {
     @Column(name = "url", nullable = false)
     private String url;
 
-    @Embedded
-    private ContentInfo contentInfo;
-
     @Column(name = "content_name", nullable = false)
     private String contentName;
 
@@ -43,10 +39,9 @@ public class Content extends BaseEntity {
     private String hint;
 
     @Builder
-    public Content(Long userId, String url, ContentInfo contentInfo, String contentName, String address, Double latitude, Double longitude, String hint) {
+    public Content(Long userId, String url, String contentName, String address, Double latitude, Double longitude, String hint) {
         this.userId = userId;
         this.url = url;
-        this.contentInfo = contentInfo;
         this.contentName = contentName;
         this.address = address;
         this.latitude = latitude;
