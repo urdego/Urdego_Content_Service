@@ -1,6 +1,8 @@
 package io.urdego.urdego_content_service.domain.service;
 
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
+import io.urdego.urdego_content_service.api.controller.dto.response.ContentResponse;
+import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import io.urdego.urdego_content_service.domain.entity.Content;
@@ -11,12 +13,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
 
+    private static final Long MAX_LIMIT = 1L;
     private final ContentRepository contentRepository;
 
     // 컨텐츠 저장
@@ -56,7 +62,39 @@ public class ContentServiceImpl implements ContentService {
         }
     }
 
+    @Override
     // 컨텐츠 조회
+    public UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit) {
+
+        limit = Math.max(limit, MAX_LIMIT);
+
+        List<ContentResponse> userContents = contentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
+
+        // 총 컨텐츠 수 조회
+        Long totalContent = contentRepository.countUserContentsByUserId(userId);
+
+        // 컨텐츠가 비어있을경우 빈 배열 반환
+        if (userContents.isEmpty()) {
+
+            return UserContentListAndCursorIdxResponse.builder()
+                    .contents(Collections.emptyList())
+                    .userId(userId)
+                    .build();
+        }
+
+        UserContentListAndCursorIdxResponse response =
+                UserContentListAndCursorIdxResponse.builder()
+                        .contents(userContents)
+                        .totalContent(totalContent)
+                        .userId(userId)
+                        .build();
+        response.setNextCursorIdx();
+
+        return response;
+    }
+
+
+    // 컨텐츠 엔티티 조회
     private Content findUserContentByIdOrException(Long contentId) {
         return contentRepository
                 .findById(contentId).orElseThrow(() -> {
