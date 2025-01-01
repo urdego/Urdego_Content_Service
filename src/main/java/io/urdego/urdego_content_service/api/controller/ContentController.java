@@ -25,4 +25,14 @@ public class ContentController {
 
         return ResponseEntity.ok().build();
     }
+
+    // 컨텐츠 삭제
+    // Todo: 검증로직 필요
+    @DeleteMapping(value = "{userId}/content/{contentId}")
+    public ResponseEntity<Void> deleteContent(@PathVariable Long userId,
+                                              @PathVariable Long contentId) {
+
+        contentService.deleteContent(contentId);
+        return ResponseEntity.ok().build();
+    }
 }
