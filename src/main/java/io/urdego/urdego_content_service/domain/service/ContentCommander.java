@@ -2,6 +2,7 @@ package io.urdego.urdego_content_service.domain.service;
 
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
+import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,11 +19,13 @@ public class ContentCommander {
     public static final Path BASE_PATH = Path.of("/urdego/user/content");
     public static final String BASE_URL = "http://urdego.site/urdego/user/content";
 
-    public static String saveContent(Long userId, String contentName, MultipartFile content) {
-        Path savedContentPath = BASE_PATH.resolve(Path.of(String.valueOf(userId), contentName));
+    // 컨텐츠 저장
+    public static FileInfo saveContent(Long userId, MultipartFile content) {
+        String filename = createFilename(userId, content.getOriginalFilename());
+
+        Path savedContentPath = BASE_PATH.resolve(Path.of(String.valueOf(userId), filename));
         createParentDirectories(savedContentPath);
 
-        String filename = createFilename(userId, content.getOriginalFilename());
         try (InputStream is = content.getInputStream();
              OutputStream os = Files.newOutputStream(savedContentPath)) {
 
@@ -32,7 +35,22 @@ public class ContentCommander {
             throw new UserContentException(ExceptionMessage.CONTENT_SAVE_FAILED);
         }
 
-        return BASE_URL + "/" + userId + "/" + filename;
+        return FileInfo.builder()
+                .fileName(filename)
+                .savedPath(BASE_URL + "/" + userId + "/" + filename)
+                .build();
+    }
+
+    // 컨텐츠 삭제
+    public static void deleteContent(Long userId, String filename) {
+        Path contentPath = BASE_PATH.resolve(Path.of(String.valueOf(userId), filename));
+
+        try {
+            // 파일 삭제
+            Files.deleteIfExists(contentPath);
+        } catch (IOException e) {
+            throw new UserContentException(ExceptionMessage.CONTENT_DELETE_FAILED);
+        }
     }
 
     private static void createParentDirectories(Path contentPath) {

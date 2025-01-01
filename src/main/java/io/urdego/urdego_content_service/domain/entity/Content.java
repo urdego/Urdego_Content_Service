@@ -24,7 +24,7 @@ public class Content extends BaseEntity {
     private String url;
 
     @Column(name = "content_name", nullable = false)
-    private String contentName;
+    private String contentName; // 유저가 작성한 이름
 
     @Column(name = "address")
     private String address;  // 도로명 주소
@@ -38,8 +38,11 @@ public class Content extends BaseEntity {
     @Column(name = "hint", length = 255)
     private String hint;
 
+    @Column(name = "file_name", nullable = false)
+    private String fileName;  // 컨텐츠 저장 이름
+
     @Builder
-    public Content(Long userId, String url, String contentName, String address, Double latitude, Double longitude, String hint) {
+    public Content(Long userId, String url, String contentName, String address, Double latitude, Double longitude, String hint, String fileName) {
         this.userId = userId;
         this.url = url;
         this.contentName = contentName;
@@ -47,5 +50,6 @@ public class Content extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.hint = hint;
+        this.fileName = fileName;
     }
 }
