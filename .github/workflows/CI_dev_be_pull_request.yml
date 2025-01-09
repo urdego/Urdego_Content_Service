@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    # 실행 환경 (GitHub-hosted Runners 사용)
+    # 실행 환경
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,44 +25,38 @@ jobs:
         run: |
           pwd
           ls -al
-          ls -al Urdego_Content_Service
 
       # resources 폴더 생성
       - name: resources 폴더 생성
         run: |
-          mkdir -p ./Urdego_Content_Service/src/main/resources
+          mkdir -p ./src/main/resources
 
       # yml 파일 생성
       - name: yml 파일 생성
         run: |
-          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" > ./Urdego_Content_Service/src/main/resources/application.yml
-          echo "${{ secrets.CONTENT_APPLICATION_DB }}" > ./Urdego_Content_Service/src/main/resources/database-prod.yml
+          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" > ./src/main/resources/application.yml
+          echo "${{ secrets.CONTENT_APPLICATION_DB }}" > ./src/main/resources/database-prod.yml
 
       # gradlew 실행 권한 부여
       - name: Gradlew 실행권한 부여
-        run: chmod +x ./Urdego_Content_Service/gradlew
+        run: chmod +x ./gradlew
 
       # 빌드
       - name: 빌드
-        run: |
-          cd ./Urdego_Content_Service
-          ./gradlew clean build -x test
+        run: ./gradlew clean build -x test
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     steps:
-      - uses: actions/checkout@v3  # Checkout 추가
+      - uses: actions/checkout@v3
 
       # 디버깅용 디렉토리 구조 출력
       - name: 디버깅용 디렉토리 구조 출력
         run: |
           pwd
           ls -al
-          ls -al Urdego_Content_Service
 
       # Gradle 테스트 실행
       - name: Gradle 테스트
-        run: |
-          cd ./Urdego_Content_Service
-          ./gradlew test
+        run: ./gradlew test
