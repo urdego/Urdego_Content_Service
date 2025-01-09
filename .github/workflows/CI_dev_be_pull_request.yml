@@ -46,4 +46,7 @@ jobs:
     - name: Gradle 테스트
       run: |
         ./gradlew test
-
+        
+    - name: 테스트 yaml 파일 변경
+      run: |
+        echo "${{ secrets.CONTENT_APPLICATION_TEST }}" > ./src/main/resources/application-test.yml
