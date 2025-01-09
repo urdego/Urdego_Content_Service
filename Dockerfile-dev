@@ -4,7 +4,7 @@ FROM openjdk:17-jdk-slim
 ARG PROFILE
 ENV PROFILE=${PROFILE}
 
-ARG JAR_FILE=/build/libs/Urdego_Content_Service-0.0.1-SNAPSHOP.jar
+ARG JAR_FILE=/build/libs/Urdego_Content_Service-0.0.1-SNAPSHOT.jar
 
 COPY ${JAR_FILE} /app.jar
 
