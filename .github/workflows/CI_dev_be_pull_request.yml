@@ -46,7 +46,7 @@ jobs:
         run: ./gradlew clean build -x test
 
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v3
