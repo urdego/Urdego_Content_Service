@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     # 실행 환경 (Git Runners 개인 서버)
-    runs-on: urdego
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
