@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     # 실행 환경
-    runs-on: ubuntu-latest
+    runs-on: urdego
     steps:
       - uses: actions/checkout@v3
 
