@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     # 실행 환경
-    runs-on: urdego
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
 
