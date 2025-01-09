@@ -1,4 +1,4 @@
-name: Spring Boot & Gradle CI Jobs (With. dev branches pull_request)
+name: Spring Boot & Gradle CI Jobs (With dev branches pull_request)
 
 on:
   push:
@@ -6,49 +6,63 @@ on:
     paths:
       - 'src/**'
 
-
 jobs:
   build:
-    # 실행 환경 (Git Runners 개인 서버)
+    # 실행 환경 (GitHub-hosted Runners 사용)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'adopt'
+      - uses: actions/checkout@v3
 
-    # application.yml 파일 설정
-    - name: resources 폴더 생성
-      run: |
-        mkdir -p ./Urdego_Content_Service/src/main/resources
+      # JDK 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
 
-    - name: yml 파일 생성
-      run: |
-        echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" > ./Urdego_Content_Service/src/main/resources/application.yml
-        echo "${{ secrets.CONTENT_APPLICATION_DB }}" > ./Urdego_Content_Service/src/main/resources/database-prod.yml
+      # 디버깅용 디렉토리 구조 출력
+      - name: 디버깅용 디렉토리 구조 출력
+        run: |
+          pwd
+          ls -al
+          ls -al Urdego_Content_Service
 
-    # gradlew를 실행시키기 위한 권한 부여
-    - name: Gradlew 실행권한 부여
-      run: chmod +x ./Urdego_Content_Service/gradlew
+      # resources 폴더 생성
+      - name: resources 폴더 생성
+        run: |
+          mkdir -p ./Urdego_Content_Service/src/main/resources
 
-    # 빌드
-    - name: 빌드
-      run: |
-        cd ./Urdego_Content_Service
-        ./gradlew clean build -x test
+      # yml 파일 생성
+      - name: yml 파일 생성
+        run: |
+          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" > ./Urdego_Content_Service/src/main/resources/application.yml
+          echo "${{ secrets.CONTENT_APPLICATION_DB }}" > ./Urdego_Content_Service/src/main/resources/database-prod.yml
+
+      # gradlew 실행 권한 부여
+      - name: Gradlew 실행권한 부여
+        run: chmod +x ./Urdego_Content_Service/gradlew
+
+      # 빌드
+      - name: 빌드
+        run: |
+          cd ./Urdego_Content_Service
+          ./gradlew clean build -x test
 
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: build
     steps:
-    - name: Gradle 테스트
-      run: |
-        cd ./Urdego_Content_Service
-        ./gradlew test
+      - uses: actions/checkout@v3  # Checkout 추가
 
+      # 디버깅용 디렉토리 구조 출력
+      - name: 디버깅용 디렉토리 구조 출력
+        run: |
+          pwd
+          ls -al
+          ls -al Urdego_Content_Service
 
-
-
-        
+      # Gradle 테스트 실행
+      - name: Gradle 테스트
+        run: |
+          cd ./Urdego_Content_Service
+          ./gradlew test
