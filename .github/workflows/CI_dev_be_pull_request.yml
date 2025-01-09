@@ -38,3 +38,12 @@ jobs:
       # 빌드
       - name: 빌드
         run: ./gradlew clean build -x test
+
+  test:
+    runs-on: [self-hosted, urdego]
+    needs: build
+    steps:
+    - name: Gradle 테스트
+      run: |
+        ./gradlew test
+
