@@ -43,14 +43,19 @@ jobs:
     runs-on: [self-hosted, urdego]
     needs: build
     steps:
-    
-    - name: 테스트 yaml 파일 변경
-      run: |
-        mkdir -p ./src/main/resources
-        echo "${{ secrets.CONTENT_APPLICATION_TEST }}" > ./src/main/resources/application-test.yml
-        
-    - name: Gradle 테스트
-      run: |
-        ./gradlew test -Dspring.profiles.active=test
-        
+      - uses: actions/checkout@v3
+
+      # 테스트 yaml 파일 생성
+      - name: 테스트 yaml 파일 생성
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.CONTENT_APPLICATION_TEST }}" > ./src/main/resources/application-test.yml
+
+      # gradlew 실행 권한 부여
+      - name: Gradlew 실행권한 부여
+        run: chmod +x ./gradlew
+
+      # Gradle 테스트 실행
+      - name: Gradle 테스트
+        run: ./gradlew test -Dspring.profiles.active=test
 
