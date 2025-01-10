@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" >> ./src/main/resources/application.yml
           echo "${{ secrets.CONTENT_APPLICATION_PROD }}" >> ./src/main/resources/application-prod.yml
-          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" >> ./src/main/resources/database-prod.yml
+          echo "${{ secrets.CONTENT_APPLICATION_DB }}" >> ./src/main/resources/database-prod.yml
 
       # gradlew 실행 권한 부여
       - name: Gradlew 실행권한 부여
