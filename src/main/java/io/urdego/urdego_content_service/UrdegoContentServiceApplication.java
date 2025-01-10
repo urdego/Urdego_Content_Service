@@ -11,5 +11,5 @@ public class UrdegoContentServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UrdegoContentServiceApplication.class, args);
 	}
-
+	
 }
