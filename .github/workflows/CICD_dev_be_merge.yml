@@ -1,0 +1,64 @@
+name: Spring Boot & Gradle CICD Jobs (With. dev branches push)
+
+on:
+  push:
+    branches: [ dev ]
+    paths:
+      - 'src/**'
+
+jobs:
+  build:
+    # 실행 환경 (urdego 서버)
+    runs-on: [self-hosted, urdego]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      # application.yml 파일 설정
+      - name: resources 폴더 생성
+        run: |
+          mkdir -p ./src/main/resources
+
+      # yml 파일 생성
+      - name: yml 파일 생성
+        run: |
+          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" >> ./src/main/resources/application.yml
+          echo "${{ secrets.CONTENT_APPLICATION_PROD }}" >> ./src/main/resources/application-prod.yml
+          echo "${{ secrets.CONTENT_APPLICATION_DEFAULT }}" >> ./src/main/resources/database-prod.yml
+
+      # gradlew 실행 권한 부여
+      - name: Gradlew 실행권한 부여
+        run: chmod +x ./gradlew
+
+      - name: 빌드 (테스트 미포함)
+        run: ./gradlew clean build -x test
+
+  deploy:
+    # Docker 배포 작업
+    name: docker deployment
+    needs: build # deponeds on
+    runs-on: [self-hosted, urdego]
+
+    steps:
+      - name: docker-compose 생성
+        run: |
+          echo "${{ secrets.DOCKER_COMPOSE_CONTENT }}" >> ./docker-compose.yml
+
+      # 도커 컨테이너 중지 및 이미지 제거
+      - name: 도커 컴포즈 다운 및 이미지 제거
+        run: |
+          docker-compose down
+          # 특정 이미지 제거
+          docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'content_service:latest') || echo "No content_service image to remove"
+      
+      # 도커 컴포즈 실행
+      - name: 도커 컴포즈 실행
+        run: |
+          docker-compose up -d
+        
+      
+    

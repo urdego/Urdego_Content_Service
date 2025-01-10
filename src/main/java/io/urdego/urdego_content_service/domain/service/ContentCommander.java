@@ -17,7 +17,7 @@ import java.util.UUID;
 public class ContentCommander {
 
     public static final Path BASE_PATH = Path.of("/urdego/user/content");
-    public static final String BASE_URL = "http://urdego.site/urdego/user/content";
+    public static final String BASE_URL = "https://urdego.site/file/user/content";
 
     // 컨텐츠 저장
     public static FileInfo saveContent(Long userId, MultipartFile content) {
@@ -83,7 +83,7 @@ public class ContentCommander {
         String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 
         // 유효한 확장자
-        List<String> validExtensions = List.of(".jpg", ".jpeg", ".png", ".mp4", ".mov");
+        List<String> validExtensions = List.of("webp, .jpg", ".jpeg", ".png", ".mp4", ".mov");
 
         // 확장자가 유효하지 않으면 예외 발생
         if (!validExtensions.contains(extension.toLowerCase())) {
