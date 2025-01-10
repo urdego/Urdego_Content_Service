@@ -52,8 +52,8 @@ jobs:
         run: |
           docker-compose down
           # 특정 이미지 제거
-          docker rmi $(docker images --format "{{.content_service}}:{{.latest}}" | grep content_service) || echo "No content_service image to remove"
-
+          docker rmi $(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'content_service:latest') || echo "No content_service image to remove"
+      
       # 도커 컴포즈 실행
       - name: 도커 컴포즈 실행
         run: |
