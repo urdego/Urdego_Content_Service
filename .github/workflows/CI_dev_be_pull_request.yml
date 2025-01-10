@@ -37,5 +37,5 @@ jobs:
 
       # 빌드
       - name: 빌드
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
 
