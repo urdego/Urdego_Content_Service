@@ -1,7 +1,7 @@
 name: Spring Boot & Gradle CI Jobs (With dev branches pull_request)
 
 on:
-  push:
+  pull_request:
     branches: [ dev ]
     paths:
       - 'src/**'
@@ -35,13 +35,7 @@ jobs:
       - name: Gradlew 실행권한 부여
         run: chmod +x ./gradlew
 
-      - name: 기존 JAR 파일 삭제
-        run: rm -rf ./build/libs/*.jar
-
-      - name: Gradle 캐시 무효화
-        run: rm -rf ~/.gradle
-
       # 빌드
-      - name: 빌드
-        run: ./gradlew clean build -x test
+      - name: 빌드 (테스트 포함)
+        run: ./gradlew clean build
 
