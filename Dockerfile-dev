@@ -7,8 +7,5 @@ ENV PROFILE=${PROFILE}
 ARG JAR_FILE=/build/libs/Urdego_Content_Service-0.0.1-SNAPSHOT.jar
 
 COPY ${JAR_FILE} /app.jar
-# application.yml 및 database-prod.yml 복사
-COPY src/main/resources/application.yml src/main/resources/application.yml
-COPY src/main/resources/database-prod.yml src/main/resources/database-prod.yml
 
 ENTRYPOINT ["java","-jar","-Dspring.profiles.active=${PROFILE}", "/app.jar"]
