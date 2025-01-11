@@ -25,7 +25,9 @@ public class SwaggerConfig {
         Info info = new Info()
                 .title("Urdego Content Service")
                 .version("1.0.0")
-                .description("어데고 컨텐츠 서버 API 문서입니다.")
+                .description("어데고 컨텐츠 서버 API 문서입니다.\n\n"
+                        + "[User Service <- 이동하기](https://urdego.site/user/swagger-ui/index.html)\n\n"
+                        + "[Game Service <- 이동하기](https://urdego.site/game/swagger-ui/index.html)")
                 .contact(new Contact()
                         .name("Urdego GitHub Link")
                         .url("https://github.com/urdego/Urdego_Content_Service"))
