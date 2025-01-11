@@ -37,7 +37,7 @@ public class SwaggerConfig {
 
         // 서버 목록 설정
         List<Server> servers = serverList.stream()
-                .map(url -> new Server().url(url).description("Server URL: " + url))
+                .map(url -> new Server().url(url))
                 .collect(Collectors.toList());
 
         // JWT 인증 설정
