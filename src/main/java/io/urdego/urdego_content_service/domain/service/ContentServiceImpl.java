@@ -1,5 +1,6 @@
 package io.urdego.urdego_content_service.domain.service;
 
+import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.ContentResponse;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
@@ -8,17 +9,18 @@ import io.urdego.urdego_content_service.common.exception.content.UserContentExce
 import io.urdego.urdego_content_service.domain.entity.Content;
 import io.urdego.urdego_content_service.domain.entity.repository.ContentRepository;
 import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
 
@@ -27,6 +29,7 @@ public class ContentServiceImpl implements ContentService {
 
     // 컨텐츠 저장
     @Override
+    @Transactional
     public void saveContent(Long userId, ContentSaveRequest request) {
 
         FileInfo fileInfo = ContentCommander.saveContent(userId, request.getContent());
@@ -44,8 +47,44 @@ public class ContentServiceImpl implements ContentService {
         contentRepository.save(content);
     }
 
+    // 컨텐츠 다중 저장
+    @Override
+    @Transactional
+    public void saveMultiContent(Long userId, ContentMultiSaveRequest request) {
+
+        try {
+            List<Content> contentList = new ArrayList<>();
+
+            for (MultipartFile contents : request.getContents()) {
+                FileInfo fileInfo = ContentCommander.saveContent(userId, contents); // 파일 저장
+
+                // Content 엔티티 생성
+                Content content = Content.builder()
+                        .userId(userId)
+                        .url(fileInfo.getSavedPath())
+                        .contentName(request.getContentName())
+                        .address(request.getAddress())
+                        .latitude(request.getLatitude())
+                        .longitude(request.getLongitude())
+                        .hint(request.getHint())
+                        .fileName(fileInfo.getFileName())
+                        .build();
+
+                contentList.add(content); // 리스트에 추가
+            }
+            // 배치 저장
+            contentRepository.saveAll(contentList);
+
+        } catch (Exception e) {
+            log.error("{}", ExceptionMessage.CONTENT_MULTI_SAVE_FAILED);
+            throw new UserContentException(ExceptionMessage.CONTENT_MULTI_SAVE_FAILED);
+        }
+    }
+
+
     // 컨텐츠 삭제
     @Override
+    @Transactional
     public void deleteContent(Long contentId) {
 
         Content content = findUserContentByIdOrException(contentId);
@@ -62,8 +101,9 @@ public class ContentServiceImpl implements ContentService {
         }
     }
 
-    @Override
     // 컨텐츠 조회
+    @Override
+    @Transactional(readOnly = true)
     public UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit) {
 
         limit = Math.max(limit, MAX_LIMIT);

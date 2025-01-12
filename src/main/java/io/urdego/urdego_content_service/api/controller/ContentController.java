@@ -3,6 +3,7 @@ package io.urdego.urdego_content_service.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.domain.service.ContentService;
@@ -25,10 +26,7 @@ public class ContentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             mediaType = "multipart/form-data",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentSaveRequest.class)
-                    )
-            )
-    ) // 스웨거에서 multipart/form-data 형식을 처리
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentSaveRequest.class)))) // 스웨거에서 multipart/form-data 형식을 처리
     @PostMapping("/{userId}")
     public ResponseEntity<Void> saveContent(@ModelAttribute ContentSaveRequest request,
                                             @PathVariable Long userId) {
@@ -38,6 +36,22 @@ public class ContentController {
 
         return ResponseEntity.ok().build();
     }
+
+    // 여러 컨텐츠 저장
+    @Tag(name = "컨텐츠 API")
+    @Operation(summary = "컨텐츠 다중 저장", description = "userId와 다중 컨텐츠 그리고 사용자 입력을 받아 컨텐츠를 저장",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = "multipart/form-data",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentMultiSaveRequest.class))))
+    @PostMapping("/{userId}/multiple")
+    public ResponseEntity<Void> saveContentMulti(@ModelAttribute ContentMultiSaveRequest request,
+                                                 @PathVariable Long userId) {
+        contentService.saveMultiContent(userId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
 
     // 컨텐츠 삭제
     // Todo: 검증로직 필요
