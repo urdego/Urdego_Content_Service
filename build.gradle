@@ -29,7 +29,7 @@ ext {
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
 	}
 }
 
