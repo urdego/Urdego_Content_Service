@@ -18,7 +18,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("어데고 컨텐츠 API")
-                        .version("v1.0.0")
+                        .version("v3")
                         .description("어데고 컨텐츠 서버")
                         .contact(new Contact()
                                 .name("📍 어데고 GitHub Link")
