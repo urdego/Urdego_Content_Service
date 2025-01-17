@@ -67,7 +67,7 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	// Swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.7.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 }
 
 
