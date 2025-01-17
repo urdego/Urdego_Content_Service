@@ -18,7 +18,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("어데고 컨텐츠 API")
-                        .version("v3")
+                        .version("v1.0.0")
                         .description("어데고 컨텐츠 서버")
                         .contact(new Contact()
                                 .name("📍 어데고 GitHub Link")
@@ -26,6 +26,7 @@ public class SwaggerConfig {
                         .license(new License()
                                 .name("⚖️ Apache License Version 2.0")
                                 .url("http://www.apache.org/licenses/LICENSE-2.0")))
+
 
                 .servers(List.of(
                         new Server().url("https://urdego.site"),
