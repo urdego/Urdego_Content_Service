@@ -20,8 +20,7 @@ public class ContentRepositoryImpl implements ContentRepositoryCustom {
 
     // userId를 통해 해당 유저의 컨텐츠를 조회한다.
     @Override
-    public List<ContentResponse> findUserContentsByUserId_CursorPaging(
-            Long userId, Long cursorIdx, Long limit) {
+    public List<ContentResponse> findUserContentsByUserId_CursorPaging(Long userId, Long cursorIdx, Long limit) {
 
         JPAQuery<ContentResponse> query =
                 queryFactory.select(Projections.constructor(ContentResponse.class,
@@ -50,5 +49,25 @@ public class ContentRepositoryImpl implements ContentRepositoryCustom {
                 .from(content)
                 .where(content.userId.eq(userId))
                 .fetchOne();
+    }
+
+
+    // userId를 통해 해당 유저의 컨텐츠를 조회한다.
+    @Override
+    public List<ContentResponse> findUserContentsByUserId(Long userId) {
+
+        JPAQuery<ContentResponse> query =
+                queryFactory.select(Projections.constructor(ContentResponse.class,
+                                content.id,
+                                content.url,
+                                content.contentName,
+                                content.address,
+                                content.latitude,
+                                content.longitude,
+                                content.hint))
+                        .from(content)
+                        .where(content.userId.eq(userId));
+
+        return query.fetch();
     }
 }

@@ -83,7 +83,7 @@ public class ContentCommander {
         String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 
         // 유효한 확장자
-        List<String> validExtensions = List.of(".webp", ".WEBP", ".jpg", ".JPG", ".jpeg", ".JPEG", ".png", ".PNG", ".mp4", ".mov");
+        List<String> validExtensions = List.of(".webp", ".WEBP", ".jpg", ".JPG", ".jpeg", ".JPEG", ".png", ".PNG");
 
         // 확장자가 유효하지 않으면 예외 발생
         if (!validExtensions.contains(extension.toLowerCase())) {
