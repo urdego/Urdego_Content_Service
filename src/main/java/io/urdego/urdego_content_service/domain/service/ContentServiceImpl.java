@@ -15,9 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,6 +24,7 @@ import java.util.List;
 public class ContentServiceImpl implements ContentService {
 
     private static final Long MAX_LIMIT = 1L;
+    private static final Long ADMIN = 1L;
     private final ContentRepository contentRepository;
 
     // 컨텐츠 저장
@@ -133,6 +133,54 @@ public class ContentServiceImpl implements ContentService {
         return response;
     }
 
+    // 개별 컨텐츠 조회 (백엔드 API)
+    @Override
+    @Transactional(readOnly = true)
+    public ContentResponse getContent(Long contentId) {
+
+        Content content = findUserContentByIdOrException(contentId);
+
+        return ContentResponse.of(content);
+    }
+
+    // 어데고 컨텐츠 랜덤 조회 (백엔드 API)
+    @Override
+    @Transactional(readOnly = true)
+    public List<ContentResponse> getUrdegoContents(int counts) {
+
+        // 어데고 컨텐츠 조회
+        List<ContentResponse> urdegoContents = contentRepository.findUserContentsByUserId(ADMIN);
+
+        // 데이터가 3개미만 예외처리
+        if (urdegoContents.size() < 3) {
+            throw new UserContentException(ExceptionMessage.GAME_CONTENT_NOT_ENOUGH);
+        }
+
+        // contentName을 기준으로 그룹화
+        Map<String, List<ContentResponse>> groupedByName = urdegoContents.stream()
+                .collect(Collectors.groupingBy(ContentResponse::getContentName));
+
+        // 그룹화된 데이터를 처리
+        List<List<ContentResponse>> groupedList = groupedByName.values().stream()
+                .map(group -> {
+                    // 그룹 내부를 셔플 후 최대 3개 선택
+                    Collections.shuffle(group);
+                    return group.stream().limit(3).toList();
+                })
+                .collect(Collectors.toList());
+
+        // 그룹 순서를 셔플
+        Collections.shuffle(groupedList);
+
+        // 결과 리스트 생성
+        List<ContentResponse> result = new ArrayList<>();
+        groupedList.forEach(result::addAll);
+
+        // counts에 맞게 제한
+        return result.stream()
+                .limit(counts)
+                .collect(Collectors.toList());
+    }
 
     // 컨텐츠 엔티티 조회
     private Content findUserContentByIdOrException(Long contentId) {
