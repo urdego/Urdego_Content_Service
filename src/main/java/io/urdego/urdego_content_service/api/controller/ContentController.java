@@ -20,7 +20,6 @@ public class ContentController {
     private final ContentService contentService;
 
     // 컨텐츠 저장
-    // Todo: Security 인증 로직 필요
     @Tag(name = "컨텐츠 API")
     @Operation(summary = "컨텐츠 저장", description = "userId와 컨텐츠 그리고 사용자 입력을 받아 컨텐츠를 저장",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -54,7 +53,6 @@ public class ContentController {
 
 
     // 컨텐츠 삭제
-    // Todo: 검증로직 필요
     @Tag(name = "컨텐츠 API")
     @Operation(summary = "컨텐츠 삭제", description = "userId와 contentId를 가지고 컨텐츠 개별 삭제")
     @DeleteMapping(value = "{userId}/content/{contentId}")
