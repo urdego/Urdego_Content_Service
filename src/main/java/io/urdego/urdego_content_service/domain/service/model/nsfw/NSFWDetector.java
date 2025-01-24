@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 // 유해 컨텐츠 감지 (NSFW = Not Safe For Work)
 public class NSFWDetector {
 
-    private static final Path MODEL_PATH = Paths.get("src/main/resources/nsfw.pb");
+    private static final Path MODEL_PATH = Paths.get("/urdego/tensorflow/nsfw.pb");
     private static final String INPUT_TENSOR = "input_1";
     private static final String OUTPUT_TENSOR = "dense_3/Softmax";
     private static final double NSFW_RATIO = 0.6;
