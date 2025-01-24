@@ -2,13 +2,15 @@ package io.urdego.urdego_content_service.common.exception;
 
 import feign.FeignException;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
+
 
 import java.util.stream.Collectors;
 
@@ -17,10 +19,12 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     // 유저 컨텐츠 예외 처리
     @ExceptionHandler(UserContentException.class)
-    public ResponseEntity<ErrorResponse> handleUserContentException(UserContentException e, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleUserContentException(UserContentException e) {
 
+        log.error("UserContentException: {}", e.getMessage(), e); // 로그 추가
         ErrorResponse response =
                 ErrorResponse.from(BAD_REQUEST.value(), BAD_REQUEST.getReasonPhrase(), e.getMessage());
 
