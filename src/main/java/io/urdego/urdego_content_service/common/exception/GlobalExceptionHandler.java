@@ -1,11 +1,14 @@
 package io.urdego.urdego_content_service.common.exception;
 
 import feign.FeignException;
+import io.urdego.urdego_content_service.common.exception.content.UserContentException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.stream.Collectors;
 
@@ -13,6 +16,17 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // 유저 컨텐츠 예외 처리
+    @ExceptionHandler(UserContentException.class)
+    public ResponseEntity<ErrorResponse> handleUserContentException(UserContentException e, WebRequest request) {
+
+        ErrorResponse response =
+                ErrorResponse.from(BAD_REQUEST.value(), BAD_REQUEST.getReasonPhrase(), e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     /*
        데이터 바인딩 중 발생하는 에러 BindException 처리
     */
