@@ -30,6 +30,8 @@ public class NSFWDetector {
             byte[] graphDef = Files.readAllBytes(MODEL_PATH);
             graph.importGraphDef(GraphDef.parseFrom(graphDef));
         } catch (IOException e) {
+            System.err.println("GraphDef 파일을 로드하는 데 실패했습니다: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Failed to load GraphDef", e);
         }
     }
