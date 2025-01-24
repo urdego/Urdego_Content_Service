@@ -68,6 +68,10 @@ dependencies {
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	// Tensorflow (컨텐츠 유해성 감지)
+	implementation 'org.tensorflow:tensorflow-core-api:1.0.0-rc.2'
+	runtimeOnly 'org.tensorflow:tensorflow-core-native:1.0.0-rc.2:macosx-arm64'
 }
 
 
