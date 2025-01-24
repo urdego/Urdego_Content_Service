@@ -3,6 +3,7 @@ package io.urdego.urdego_content_service.domain.service;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
+import io.urdego.urdego_content_service.domain.service.model.nsfw.NSFWDetector;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,24 +22,32 @@ public class ContentCommander {
 
     // 컨텐츠 저장
     public static FileInfo saveContent(Long userId, MultipartFile content) {
-        String filename = createFilename(userId, content.getOriginalFilename());
 
-        Path savedContentPath = BASE_PATH.resolve(Path.of(String.valueOf(userId), filename));
-        createParentDirectories(savedContentPath);
+        try {
+            // NSFW 검사
+            if (NSFWDetector.isNSFW(content.getBytes())) {
+                throw new UserContentException(ExceptionMessage.CONTENT_NOT_ALLOWED);
+            }
 
-        try (InputStream is = content.getInputStream();
-             OutputStream os = Files.newOutputStream(savedContentPath)) {
+            String filename = createFilename(userId, content.getOriginalFilename());
+            Path savedContentPath = BASE_PATH.resolve(Path.of(String.valueOf(userId), filename));
+            createParentDirectories(savedContentPath);
 
-            // 컨텐츠 저장
-            StreamUtils.copy(is, os);
+            try (InputStream is = content.getInputStream();
+                 OutputStream os = Files.newOutputStream(savedContentPath)) {
+
+                // 컨텐츠 저장
+                StreamUtils.copy(is, os);
+            }
+
+            return FileInfo.builder()
+                    .fileName(filename)
+                    .savedPath(BASE_URL + "/" + userId + "/" + filename)
+                    .build();
+
         } catch (IOException e) {
             throw new UserContentException(ExceptionMessage.CONTENT_SAVE_FAILED);
         }
-
-        return FileInfo.builder()
-                .fileName(filename)
-                .savedPath(BASE_URL + "/" + userId + "/" + filename)
-                .build();
     }
 
     // 컨텐츠 삭제
