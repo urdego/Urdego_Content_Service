@@ -1,5 +1,7 @@
 package io.urdego.urdego_content_service.domain.service.model.nsfw;
 
+import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
+import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import org.tensorflow.Graph;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;
@@ -30,9 +32,7 @@ public class NSFWDetector {
             byte[] graphDef = Files.readAllBytes(MODEL_PATH);
             graph.importGraphDef(GraphDef.parseFrom(graphDef));
         } catch (IOException e) {
-            System.err.println("GraphDef 파일을 로드하는 데 실패했습니다: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Failed to load GraphDef", e);
+            throw new UserContentException(ExceptionMessage.GRAPH_LOAD_FAILED);
         }
     }
 

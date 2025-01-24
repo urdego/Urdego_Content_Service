@@ -20,6 +20,9 @@ public enum ExceptionMessage {
     CONTENT_NOT_ALLOWED("컨텐츠에 유해성이 감지되어 저장에 실패했습니다."),
     CONTENT_ANALYSIS_FAILED("컨텐츠 분석에 실패했습니다."),
 
+    // Tensorflow
+    GRAPH_LOAD_FAILED("GraphDef 파일을 로드하는 데 실패했습니다"),
+
     // Image
     IMAGE_METADATA_FAILED("이미지 메타데이터 추출에 실패했습니다.");
 
