@@ -3,7 +3,7 @@ package io.urdego.urdego_content_service.domain.service;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
-import io.urdego.urdego_content_service.domain.service.model.nsfw.NSFWDetector;
+import io.urdego.urdego_content_service.domain.service.model.tensorflow.NSFWDetector;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
