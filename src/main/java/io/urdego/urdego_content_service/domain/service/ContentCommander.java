@@ -4,6 +4,9 @@ import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
 import io.urdego.urdego_content_service.domain.service.model.tensorflow.NSFWDetector;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,10 +18,23 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class ContentCommander {
 
-    public static final Path BASE_PATH = Path.of("/home/jra1n/urdego/user/content");
-    public static final String BASE_URL = "https://urdego.site/file/user/content";
+    @Value("${content.base-path}")
+    private String basePathStr;
+
+    @Value("${content.base-url}")
+    private String baseUrl;
+
+    private static Path BASE_PATH;
+    private static String BASE_URL;
+
+    @PostConstruct
+    public void init() {
+        BASE_PATH = Path.of(basePathStr);
+        BASE_URL = baseUrl;
+    }
 
     // 컨텐츠 저장
     public static FileInfo saveContent(Long userId, MultipartFile content) {
