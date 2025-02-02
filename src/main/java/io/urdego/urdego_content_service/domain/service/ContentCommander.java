@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class ContentCommander {
 
-    public static final Path BASE_PATH = Path.of("/urdego/user/content");
+    public static final Path BASE_PATH = Path.of("/home/jra1n/urdego/user/content");
     public static final String BASE_URL = "https://urdego.site/file/user/content";
 
     // 컨텐츠 저장
