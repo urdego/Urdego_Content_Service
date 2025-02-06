@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
+import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.domain.service.ContentService;
 import jakarta.validation.constraints.Min;
@@ -51,6 +52,19 @@ public class ContentController {
         return ResponseEntity.ok().build();
     }
 
+    // 컨텐츠 수정
+    @Tag(name = "컨텐츠 API")
+    @Operation(summary = "컨텐츠 수정", description = "contentId로 컨텐츠 개별 수정")
+    @PatchMapping(value = "{userId}/content/{contentId}")
+    public ResponseEntity<Void> updateContent(@PathVariable Long userId,
+                                              @PathVariable Long contentId,
+                                              @RequestBody ContentUpdateRequest request) {
+
+
+        contentService.updateContent(userId, contentId, request);
+        return ResponseEntity.ok().build();
+    }
+
 
     // 컨텐츠 삭제
     @Tag(name = "컨텐츠 API")
@@ -59,7 +73,7 @@ public class ContentController {
     public ResponseEntity<Void> deleteContent(@PathVariable Long userId,
                                               @PathVariable Long contentId) {
 
-        contentService.deleteContent(contentId);
+        contentService.deleteContent(userId, contentId);
         return ResponseEntity.ok().build();
     }
 
