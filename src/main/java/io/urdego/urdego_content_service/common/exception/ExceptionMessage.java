@@ -19,6 +19,7 @@ public enum ExceptionMessage {
     DIRECTORY_CREATION_FAILED("상위 폴더 생성 중 예외가 발생했습니다."),
     CONTENT_NOT_ALLOWED("컨텐츠에 유해성이 감지되어 저장에 실패했습니다."),
     CONTENT_ANALYSIS_FAILED("컨텐츠 분석에 실패했습니다."),
+    CONTENT_UPDATE_FAILED("컨텐츠 수정에 실패했습니다."),
 
     // Tensorflow
     GRAPH_LOAD_FAILED("GraphDef 파일을 로드하는 데 실패했습니다"),

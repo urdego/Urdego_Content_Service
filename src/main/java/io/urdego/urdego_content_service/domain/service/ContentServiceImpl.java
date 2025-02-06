@@ -2,6 +2,7 @@ package io.urdego.urdego_content_service.domain.service;
 
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
+import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.ContentResponse;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
@@ -15,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -81,13 +85,30 @@ public class ContentServiceImpl implements ContentService {
         }
     }
 
+    // 컨텐츠 수정
+    @Override
+    @Transactional
+    public void updateContent(Long userId, Long contentId, ContentUpdateRequest request) {
+
+        Content content = findUserContentByIdOrException(contentId);
+
+        if (!content.getUserId().equals(userId)) {
+            throw new UserContentException(ExceptionMessage.CONTENT_UPDATE_FAILED);
+        }
+        content.updateContent(request);
+    }
+
 
     // 컨텐츠 삭제
     @Override
     @Transactional
-    public void deleteContent(Long contentId) {
+    public void deleteContent(Long userId, Long contentId) {
 
         Content content = findUserContentByIdOrException(contentId);
+
+        if (!content.getUserId().equals(userId)) {
+            throw new UserContentException(ExceptionMessage.CONTENT_DELETE_FAILED);
+        }
 
         try {
             // 파일 삭제
