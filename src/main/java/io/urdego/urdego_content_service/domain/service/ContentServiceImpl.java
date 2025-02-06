@@ -4,6 +4,7 @@ import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiS
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.ContentResponse;
+import io.urdego.urdego_content_service.api.controller.dto.response.UserContentList;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
@@ -152,6 +153,28 @@ public class ContentServiceImpl implements ContentService {
         response.setNextCursorIdx();
 
         return response;
+    }
+
+    // 컨텐츠 이름 조회
+    @Override
+    @Transactional(readOnly = true)
+    public UserContentList getUserContentsSearch(Long userId, String search) {
+
+        List<ContentResponse> userContents = contentRepository.findUserContentsBySearch(userId, search);
+
+        // 컨텐츠가 비어있을경우 빈 배열 반환
+        if (userContents.isEmpty()) {
+
+            return UserContentList.builder()
+                    .contents(Collections.emptyList())
+                    .userId(userId)
+                    .build();
+        }
+
+        return UserContentList.builder()
+                .contents(userContents)
+                .userId(userId)
+                .build();
     }
 
     // 개별 컨텐츠 조회 (백엔드 API)

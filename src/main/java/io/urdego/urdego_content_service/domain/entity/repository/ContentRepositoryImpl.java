@@ -78,10 +78,34 @@ public class ContentRepositoryImpl implements ContentRepositoryCustom {
                                 content.address,
                                 content.latitude,
                                 content.longitude,
-                                content.hint))
+                                content.hint,
+                                content.createdDateTime))
                         .from(content)
                         .where(content.userId.eq(userId));
 
         return query.fetch();
+    }
+
+    @Override
+    public List<ContentResponse> findUserContentsBySearch(Long userId, String search) {
+
+        JPAQuery<ContentResponse> query =
+                queryFactory.select(Projections.constructor(ContentResponse.class,
+                                content.id,
+                                content.url,
+                                content.contentName,
+                                content.address,
+                                content.latitude,
+                                content.longitude,
+                                content.hint,
+                                content.createdDateTime))
+                        .from(content)
+                        .where(content.userId.eq(userId)
+                                .and(content.contentName.contains(search))); // 검색 기능 추가
+
+        query = query.orderBy(content.createdDateTime.desc(), content.id.desc());
+
+        return query.fetch();
+
     }
 }
