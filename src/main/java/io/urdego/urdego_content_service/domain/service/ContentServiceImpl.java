@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ContentServiceImpl implements ContentService {
 
     private static final Long MAX_LIMIT = 1L;
-    private static final Long ADMIN = 1L;
+    private static final Long ADMIN = 0L;
     private final ContentRepository contentRepository;
 
     // 컨텐츠 저장
