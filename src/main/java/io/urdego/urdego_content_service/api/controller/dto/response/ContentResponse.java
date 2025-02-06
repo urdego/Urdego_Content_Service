@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -24,6 +26,9 @@ public class ContentResponse {
 
     private String hint;
 
+    private LocalDateTime createdDateTime;
+
+
     public static ContentResponse of(Content content) {
         return ContentResponse.builder()
                 .contentId(content.getId())
@@ -33,6 +38,7 @@ public class ContentResponse {
                 .latitude(content.getLatitude())
                 .longitude(content.getLongitude())
                 .hint(content.getHint())
+                .createdDateTime(content.getCreatedDateTime())
                 .build();
     }
 }

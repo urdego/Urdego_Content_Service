@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
+import io.urdego.urdego_content_service.api.controller.dto.response.UserContentList;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 import io.urdego.urdego_content_service.domain.service.ContentService;
 import jakarta.validation.constraints.Min;
@@ -83,9 +84,22 @@ public class ContentController {
     @GetMapping(value = "{userId}/contents")
     public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(@PathVariable(name = "userId") Long userId,
                                                                                @Min(value = 0) @RequestParam(name = "cursorIdx", required = false) Long cursorIdx,
-                                                                               @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit) {
+                                                                               @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit,
+                                                                               @RequestParam(name = "sortBy", defaultValue = "oldest") String sortBy) {
 
-        UserContentListAndCursorIdxResponse responses = contentService.getUserContents(userId, cursorIdx, limit);
+        UserContentListAndCursorIdxResponse responses = contentService.getUserContents(userId, cursorIdx, limit, sortBy);
+
+        return ResponseEntity.ok().body(responses);
+    }
+
+    // 컨텐츠 검색 조회
+    @Tag(name = "컨텐츠 API")
+    @Operation(summary = "컨텐츠 검색 조회", description = "contentName 검색 조회")
+    @GetMapping(value = "{userId}/contents/search")
+    public ResponseEntity<UserContentList> getUserContentsName(@PathVariable(name = "userId") Long userId,
+                                                               @RequestParam String search) {
+
+        UserContentList responses = contentService.getUserContentsSearch(userId, search);
 
         return ResponseEntity.ok().body(responses);
     }
