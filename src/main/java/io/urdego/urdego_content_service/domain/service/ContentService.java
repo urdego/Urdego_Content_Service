@@ -4,6 +4,7 @@ import io.urdego.urdego_content_service.api.controller.dto.request.ContentMultiS
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentSaveRequest;
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
 import io.urdego.urdego_content_service.api.controller.dto.response.ContentResponse;
+import io.urdego.urdego_content_service.api.controller.dto.response.UserContentList;
 import io.urdego.urdego_content_service.api.controller.dto.response.UserContentListAndCursorIdxResponse;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public interface ContentService {
 
     // 컨텐츠 조회
     UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit, String sortBy);
+
+    // 컨텐츠 검색 조회
+    UserContentList getUserContentsSearch(Long userId, String search);
 
     // 컨텐츠 개별조회 (백엔드 API)
     ContentResponse getContent(Long contentId);

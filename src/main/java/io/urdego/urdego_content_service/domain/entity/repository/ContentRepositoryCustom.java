@@ -14,4 +14,7 @@ public interface ContentRepositoryCustom {
 
     // userId를 통해 전체 컨텐츠를 조회한다.
     List<ContentResponse> findUserContentsByUserId(Long userId);
+
+    // userId와 contentName 검색을 통해 해당 유저의 컨텐츠를 조회한다.
+    List<ContentResponse> findUserContentsBySearch(Long userId, String search);
 }
