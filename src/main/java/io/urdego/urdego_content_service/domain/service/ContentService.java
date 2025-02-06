@@ -23,7 +23,7 @@ public interface ContentService {
     void deleteContent(Long userId, Long contentId);
 
     // 컨텐츠 조회
-    UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit);
+    UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit, String sortBy);
 
     // 컨텐츠 개별조회 (백엔드 API)
     ContentResponse getContent(Long contentId);

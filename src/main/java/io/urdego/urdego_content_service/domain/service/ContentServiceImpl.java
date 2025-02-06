@@ -125,11 +125,11 @@ public class ContentServiceImpl implements ContentService {
     // 컨텐츠 조회
     @Override
     @Transactional(readOnly = true)
-    public UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit) {
+    public UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit, String sortBy) {
 
         limit = Math.max(limit, MAX_LIMIT);
 
-        List<ContentResponse> userContents = contentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
+        List<ContentResponse> userContents = contentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit, sortBy);
 
         // 총 컨텐츠 수 조회
         Long totalContent = contentRepository.countUserContentsByUserId(userId);

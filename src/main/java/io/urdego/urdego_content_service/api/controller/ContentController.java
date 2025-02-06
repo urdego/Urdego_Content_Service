@@ -83,9 +83,10 @@ public class ContentController {
     @GetMapping(value = "{userId}/contents")
     public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(@PathVariable(name = "userId") Long userId,
                                                                                @Min(value = 0) @RequestParam(name = "cursorIdx", required = false) Long cursorIdx,
-                                                                               @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit) {
+                                                                               @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit,
+                                                                               @RequestParam(name = "sortBy", defaultValue = "oldest") String sortBy) {
 
-        UserContentListAndCursorIdxResponse responses = contentService.getUserContents(userId, cursorIdx, limit);
+        UserContentListAndCursorIdxResponse responses = contentService.getUserContents(userId, cursorIdx, limit, sortBy);
 
         return ResponseEntity.ok().body(responses);
     }
