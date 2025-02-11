@@ -1,6 +1,7 @@
 package io.urdego.urdego_content_service.domain.entity;
 
 import io.urdego.urdego_content_service.api.controller.dto.request.ContentUpdateRequest;
+import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,11 +56,13 @@ public class Content extends BaseEntity {
     }
 
     // 컨텐츠 수정
-    public void updateContent(ContentUpdateRequest request) {
+    public void updateContent(ContentUpdateRequest request, FileInfo fileInfo) {
         this.contentName = request.getContentName();
         this.address = request.getAddress();
         this.latitude = request.getLatitude();
         this.longitude = request.getLongitude();
         this.hint = request.getHint();
+        this.url = fileInfo.getSavedPath();
+        this.fileName = fileInfo.getFileName();
     }
 }
