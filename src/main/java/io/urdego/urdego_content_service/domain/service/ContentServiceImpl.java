@@ -96,19 +96,8 @@ public class ContentServiceImpl implements ContentService {
         if (!content.getUserId().equals(userId)) {
             throw new UserContentException(ExceptionMessage.CONTENT_UPDATE_FAILED);
         }
-
-        try{
-            // 파일 삭제
-            ContentCommander.deleteContent(content.getUserId(), content.getFileName());
-
-            // 파일 재등록
-            FileInfo fileInfo = ContentCommander.saveContent(userId, request.getContent());
-
-            // 파일 수정
-            content.updateContent(request, fileInfo);
-        } catch (Exception e) {
-            throw new UserContentException(ExceptionMessage.CONTENT_UPDATE_FAILED);
-        }
+        // 파일 수정
+        content.updateContent(request);
     }
 
 

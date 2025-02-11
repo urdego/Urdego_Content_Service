@@ -56,15 +56,11 @@ public class ContentController {
 
     // 컨텐츠 수정
     @Tag(name = "컨텐츠 API")
-    @Operation(summary = "컨텐츠 수정", description = "contentId로 컨텐츠 개별 수정",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @io.swagger.v3.oas.annotations.media.Content(
-                            mediaType = "multipart/form-data",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentUpdateRequest.class))))
-    @PostMapping(value = "{userId}/content/{contentId}")
+    @Operation(summary = "컨텐츠 수정", description = "contentId로 컨텐츠 개별 수정")
+    @PatchMapping(value = "{userId}/content/{contentId}")
     public ResponseEntity<Void> updateContent(@PathVariable Long userId,
                                               @PathVariable Long contentId,
-                                              @ModelAttribute ContentUpdateRequest request) {
+                                              @RequestBody ContentUpdateRequest request) {
 
 
 
