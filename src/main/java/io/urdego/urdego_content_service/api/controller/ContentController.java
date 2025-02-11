@@ -27,7 +27,8 @@ public class ContentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             mediaType = "multipart/form-data",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentSaveRequest.class)))) // 스웨거에서 multipart/form-data 형식을 처리
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentSaveRequest.class))))
+    // 스웨거에서 multipart/form-data 형식을 처리
     @PostMapping("/{userId}")
     public ResponseEntity<Void> saveContent(@ModelAttribute ContentSaveRequest request,
                                             @PathVariable Long userId) {
@@ -55,11 +56,16 @@ public class ContentController {
 
     // 컨텐츠 수정
     @Tag(name = "컨텐츠 API")
-    @Operation(summary = "컨텐츠 수정", description = "contentId로 컨텐츠 개별 수정")
-    @PatchMapping(value = "{userId}/content/{contentId}")
+    @Operation(summary = "컨텐츠 수정", description = "contentId로 컨텐츠 개별 수정",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            mediaType = "multipart/form-data",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ContentUpdateRequest.class))))
+    @PostMapping(value = "{userId}/content/{contentId}")
     public ResponseEntity<Void> updateContent(@PathVariable Long userId,
                                               @PathVariable Long contentId,
-                                              @RequestBody ContentUpdateRequest request) {
+                                              @ModelAttribute ContentUpdateRequest request) {
+
 
 
         contentService.updateContent(userId, contentId, request);
