@@ -94,10 +94,16 @@ public class ContentServiceImpl implements ContentService {
         Content content = findUserContentByIdOrException(contentId);
 
         if (!content.getUserId().equals(userId)) {
+            throw new UserContentException(ExceptionMessage.CONTENT_UPDATE_NOT_PERMISSION);
+        }
+
+        try {
+            // 파일 수정
+            content.updateContent(request);
+        } catch (Exception e) {
             throw new UserContentException(ExceptionMessage.CONTENT_UPDATE_FAILED);
         }
-        // 파일 수정
-        content.updateContent(request);
+
     }
 
 
@@ -109,7 +115,7 @@ public class ContentServiceImpl implements ContentService {
         Content content = findUserContentByIdOrException(contentId);
 
         if (!content.getUserId().equals(userId)) {
-            throw new UserContentException(ExceptionMessage.CONTENT_DELETE_FAILED);
+            throw new UserContentException(ExceptionMessage.CONTENT_DELETE_NOT_PERMISSION);
         }
 
         try {
