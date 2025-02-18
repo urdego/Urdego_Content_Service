@@ -1,4 +1,4 @@
-package io.urdego.urdego_content_service.domain.service.model.tensorflow;
+package io.urdego.urdego_content_service.domain.service.model;
 
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
