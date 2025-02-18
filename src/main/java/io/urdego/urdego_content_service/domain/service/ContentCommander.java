@@ -3,7 +3,7 @@ package io.urdego.urdego_content_service.domain.service;
 import io.urdego.urdego_content_service.common.exception.ExceptionMessage;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
 import io.urdego.urdego_content_service.domain.service.dto.FileInfo;
-import io.urdego.urdego_content_service.domain.service.model.tensorflow.NSFWDetector;
+import io.urdego.urdego_content_service.domain.service.model.NSFWDetector;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
