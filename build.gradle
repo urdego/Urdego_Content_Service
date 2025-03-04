@@ -73,6 +73,10 @@ dependencies {
 	implementation 'org.tensorflow:tensorflow-core-api:1.0.0-rc.2'
 	runtimeOnly 'org.tensorflow:tensorflow-core-native:1.0.0-rc.2:macosx-arm64'
 	runtimeOnly 'org.tensorflow:tensorflow-core-native:1.0.0-rc.2:linux-x86_64'
+
+	// Monitoring
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 
