@@ -2,7 +2,6 @@ package io.urdego.urdego_content_service.common.exception;
 
 import feign.FeignException;
 import io.urdego.urdego_content_service.common.exception.content.UserContentException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -85,21 +84,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(error);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request) {
-
-        String requestUri = request.getRequestURI();
-
-        // Prometheus 요청 예외 처리 제외
-        if (requestUri.startsWith("/actuator/prometheus")) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-
-        ErrorResponse error =
-                ErrorResponse.from(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error", e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
+    
 }
 
