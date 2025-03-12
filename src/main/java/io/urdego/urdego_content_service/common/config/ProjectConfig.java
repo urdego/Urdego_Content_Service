@@ -32,7 +32,7 @@ public class ProjectConfig implements WebMvcConfigurer {
     // 프로덕션 환경에서는 Cors 설정을 Front 페이지와 허용할 서버만 등록
     private void prodProfileCorsMapping(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("https://urdego.site", "http://localhost:3000")
+                .allowedOriginPatterns("https://urdego.site", "http://localhost:3000", "https://urdego.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
